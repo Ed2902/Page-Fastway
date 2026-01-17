@@ -1,0 +1,80 @@
+.stats-strip {
+  background: var(--peach, #ffd9c2);
+  padding: clamp(26px, 4vw, 46px) 0;
+
+  &__inner {
+    width: min(1160px, 100%);
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    text-align: center;
+  }
+
+  &__item {
+    position: relative;
+    padding: clamp(14px, 2vw, 18px) 10px;
+  }
+
+  // separadores verticales
+  &__item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    bottom: 14px;
+    right: 0;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  &__value {
+    margin: 0 0 10px;
+    font-family: var(--font-title);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--orange);
+    font-size: clamp(42px, 5vw, 72px);
+    line-height: 1;
+  }
+
+  &__label {
+    margin: 0;
+    font-family: var(--font-title);
+    font-weight: 700;
+    color: var(--orange);
+    font-size: clamp(16px, 1.35vw, 22px);
+    line-height: 1.1;
+  }
+
+  &__line {
+    display: block;
+  }
+
+  @media (max-width: 900px) {
+    &__list {
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 16px;
+    }
+
+    &__item:not(:last-child)::after {
+      display: none;
+    }
+
+    // separadores horizontales suaves en mobile
+    &__item {
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+    }
+    &__item:nth-child(1),
+    &__item:nth-child(2) {
+      border-top: none;
+    }
+  }
+}

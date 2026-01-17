@@ -1,0 +1,81 @@
+.circular-tech {
+  padding: clamp(3.5rem, 5vw, 5.5rem) 0;
+  background-color: #f4f7fb; /* fondo distinto, limpio y pro */
+}
+
+.circular-tech__container {
+  width: min(1120px, 92%);
+  margin-inline: auto;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.circular-tech__block {
+  p {
+    color: var(--text-gray);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+}
+
+.circular-tech__header {
+  margin-bottom: 0.75rem;
+
+  h2 {
+    margin-top: 0.25rem;
+  }
+}
+
+/* Eyebrow con icono azul */
+.circular-tech__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  p {
+    font-weight: 600;
+    color: var(--blue);
+  }
+}
+
+.circular-tech__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 87, 255, 0.1);
+  border: 1px solid rgba(0, 87, 255, 0.18);
+
+  svg {
+    color: var(--blue);
+  }
+}
+
+.circular-tech__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.45rem;
+    font-weight: 500;
+    color: var(--text-dark);
+
+    svg {
+      color: var(--blue);
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .circular-tech__container {
+    grid-template-columns: 1fr;
+  }
+}

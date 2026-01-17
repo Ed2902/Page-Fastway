@@ -1,0 +1,90 @@
+/* src/styles/ui/_historia-pf.scss */
+
+.historia-pf {
+  padding: clamp(32px, 5vw, 88px) 0;
+
+  &__inner {
+    width: min(1160px, 100%);
+    margin: 0 auto;
+    padding: 0 16px;
+    display: grid;
+    gap: clamp(32px, 5vw, 64px); // ✅ un poco más de aire entre apartados
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(18px, 3vw, 44px);
+    align-items: center;
+
+    &.is-reverse {
+      grid-template-columns: 0.95fr 1.05fr;
+
+      .historia-pf__content {
+        order: 2;
+      }
+
+      .historia-pf__media {
+        order: 1;
+      }
+    }
+  }
+
+  &__eyebrow {
+    margin: 0 0 12px; // ✅ antes 8px
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    color: var(--orange);
+  }
+
+  &__title {
+    margin: 0 0 18px; // ✅ antes 12px
+    font-family: var(--font-title);
+    color: var(--text-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  &__text {
+    color: var(--text-gray);
+    font-family: var(--font-text);
+
+    p {
+      margin: 0 0 14px; // ✅ antes 10px
+      line-height: 1.6; // ✅ mejora lectura sin “inflar”
+      opacity: 0.92;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__media {
+    margin: 0;
+  }
+
+  &__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 18px;
+  }
+
+  @media (max-width: 900px) {
+    &__row {
+      grid-template-columns: 1fr;
+
+      &.is-reverse {
+        grid-template-columns: 1fr;
+
+        .historia-pf__content,
+        .historia-pf__media {
+          order: unset;
+        }
+      }
+    }
+  }
+}

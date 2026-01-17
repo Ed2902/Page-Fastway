@@ -1,0 +1,63 @@
+.contact-hero {
+  padding-top: calc(var(--nav-h, 88px) + clamp(2.5rem, 4vw, 4rem));
+  padding-bottom: clamp(2.5rem, 4vw, 3.5rem);
+  background-color: var(--white);
+}
+
+.contact-hero__container {
+  width: min(1120px, 92%);
+  margin-inline: auto;
+}
+
+.contact-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  p {
+    font-weight: 600;
+    color: var(--blue);
+  }
+}
+
+.contact-hero__eyebrow-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 87, 255, 0.1);
+  border: 1px solid rgba(0, 87, 255, 0.18);
+
+  svg {
+    color: var(--blue);
+  }
+}
+
+.contact-hero__lead {
+  margin-top: 0.75rem;
+  max-width: 80ch;
+  color: var(--text-gray);
+  font-size: var(--fs-lg);
+  line-height: 1.55;
+}
+
+.contact-hero__chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding: 0;
+
+  li {
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    background: #f4f7fb;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--text-dark);
+  }
+}

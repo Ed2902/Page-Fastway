@@ -1,0 +1,60 @@
+.consultoria-statement {
+  background: var(--blue);
+  padding: clamp(1.75rem, 3.5vw, 2.75rem) 0; // 👈 MENOS ALTO
+
+  &__container {
+    width: min(820px, calc(100% - 2rem));
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  h2 {
+    margin: 0 0 1.25rem; // 👈 menos espacio
+    color: var(--white);
+    line-height: 1.35; // 👈 más compacto
+    font-weight: 700;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0.75rem 1.6rem; // 👈 botón más compacto
+    border-radius: 999px;
+
+    background: var(--orange);
+    color: var(--white);
+
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+
+    box-shadow: 0 8px 22px rgba(248, 107, 37, 0.32);
+    transition:
+      transform 160ms ease,
+      box-shadow 160ms ease,
+      background 160ms ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      background: #e85e1f;
+      box-shadow: 0 12px 28px rgba(248, 107, 37, 0.42);
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .consultoria-statement {
+    padding: 1.5rem 0; // 👈 mobile aún más compacto
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+  }
+}

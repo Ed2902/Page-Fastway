@@ -1,0 +1,111 @@
+.locations-map {
+  background: var(--orange);
+  padding: clamp(32px, 5vw, 84px) 0;
+
+  &__inner {
+    width: min(1160px, 100%);
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  &__header {
+    text-align: center;
+    max-width: 78ch;
+    margin: 0 auto 22px;
+  }
+
+  &__title {
+    margin: 0 0 10px;
+    font-family: var(--font-title);
+    color: var(--white);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  &__copy {
+    margin: 0 auto;
+    font-family: var(--font-text);
+    color: rgba(255, 255, 255, 0.9);
+    opacity: 0.98;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(14px, 2vw, 22px);
+  }
+
+  &__card {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    overflow: hidden;
+    backdrop-filter: blur(6px);
+  }
+
+  &__map {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: rgba(255, 255, 255, 0.08);
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+  }
+
+  &__content {
+    padding: 16px 16px 18px;
+  }
+
+  &__heading {
+    margin: 0 0 8px;
+    font-family: var(--font-title);
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+
+  &__sub {
+    margin: 0 0 10px;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: var(--font-text);
+    font-weight: 600;
+  }
+
+  &__address {
+    margin: 0 0 10px;
+    font-style: normal;
+    color: rgba(255, 255, 255, 0.92);
+    font-family: var(--font-text);
+
+    span {
+      display: block;
+      line-height: 1.35;
+    }
+  }
+
+  &__tel {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.92);
+    font-family: var(--font-text);
+  }
+
+  &__link {
+    color: var(--white);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+
+    &:hover {
+      border-bottom-color: rgba(255, 255, 255, 0.95);
+    }
+  }
+
+  @media (max-width: 900px) {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

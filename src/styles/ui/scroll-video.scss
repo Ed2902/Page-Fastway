@@ -1,0 +1,51 @@
+.scroll-video {
+  padding: clamp(28px, 4vw, 64px) 0;
+
+  &__inner {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  &__header {
+    max-width: 72ch;
+    margin: 0 auto 16px;
+    text-align: center;
+  }
+
+  &__title {
+    margin: 0 0 8px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-dark);
+    font-family: var(--font-title);
+  }
+
+  &__copy {
+    margin: 0;
+    opacity: 0.85;
+    color: var(--text-gray);
+    font-family: var(--font-text);
+  }
+
+  &__figure {
+    margin: 0;
+  }
+
+  &__media {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--white);
+  }
+
+  &__caption {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.95rem;
+    opacity: 0.75;
+    color: var(--text-gray);
+  }
+}

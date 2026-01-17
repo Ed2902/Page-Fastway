@@ -1,0 +1,154 @@
+.consultoria-expertise {
+  padding: clamp(3.5rem, 6vw, 6rem) 0;
+  overflow-x: hidden;
+
+  // Fondo suave para que no se vea plano
+  background: linear-gradient(
+    180deg,
+    rgba(248, 107, 37, 0.06) 0%,
+    rgba(255, 255, 255, 1) 70%
+  );
+
+  &__container {
+    width: min(1120px, calc(100% - 2rem));
+    margin: 0 auto;
+  }
+
+  &__header {
+    margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+
+    h2 {
+      margin: 0;
+      position: relative;
+      padding-bottom: 0.75rem;
+
+      // Subrayado corporativo
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 84px;
+        height: 4px;
+        border-radius: 999px;
+        background: var(--orange);
+      }
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(1.5rem, 3.5vw, 3rem);
+    align-items: start;
+  }
+
+  &__text {
+    p {
+      margin: 0;
+      line-height: 1.85;
+      max-width: 62ch;
+      color: var(--text-gray);
+    }
+  }
+
+  &__topics {
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-content: flex-start;
+
+    // Caja para que se sienta bloque “pro” y no flotando
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+    background: rgba(115, 173, 237, 0.1); // azul corporativo suave
+    border: 1px solid rgba(115, 173, 237, 0.22);
+  }
+}
+
+.consultoria-topic {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0.6rem 0.95rem;
+  border-radius: 999px;
+
+  background: rgba(248, 107, 37, 0.1);
+  border: 1px solid rgba(248, 107, 37, 0.35);
+  color: var(--text-dark);
+
+  // evita scroll por palabras largas
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  line-height: 1;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    background: rgba(248, 107, 37, 0.14);
+    border-color: rgba(248, 107, 37, 0.55);
+  }
+}
+
+@media (max-width: 900px) {
+  .consultoria-expertise {
+    padding: 3rem 0;
+
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+
+    &__text p {
+      max-width: 100%;
+    }
+
+    &__topics {
+      padding: 1rem;
+    }
+  }
+
+  .consultoria-topic {
+    white-space: normal; // en mobile pueden partir línea
+    line-height: 1.25;
+  }
+}
+.consultoria-expertise {
+  &__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-gray);
+    }
+  }
+
+  &__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+
+    display: grid;
+    place-items: center;
+
+    background: rgba(115, 173, 237, 0.16);
+    border: 1px solid rgba(115, 173, 237, 0.35);
+    color: var(--blue);
+
+    svg {
+      stroke-width: 1.8;
+    }
+  }
+}

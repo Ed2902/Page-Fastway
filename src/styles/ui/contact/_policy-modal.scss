@@ -1,0 +1,117 @@
+.policy-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+}
+
+.policy-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.policy-modal__panel {
+  position: relative;
+  width: min(720px, 92%);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #0b1f3b; /* pro, no blanco */
+  color: #fff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.policy-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.policy-modal__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.05rem;
+  }
+}
+
+.policy-modal__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.policy-modal__close {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.policy-modal__content {
+  padding: 1rem 1.1rem 1.1rem;
+  color: rgba(255, 255, 255, 0.86);
+  line-height: 1.6;
+
+  p {
+    margin: 0 0 0.85rem;
+  }
+
+  ul {
+    margin: 0 0 0.9rem;
+    padding-left: 1.15rem;
+
+    li {
+      margin-bottom: 0.35rem;
+    }
+  }
+}
+
+.policy-modal__note {
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 600;
+}
+
+.policy-modal__footer {
+  padding: 1rem 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.policy-modal__btn {
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #fff;
+  color: #0b1f3b;
+  font-weight: 900;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.95;
+  }
+}

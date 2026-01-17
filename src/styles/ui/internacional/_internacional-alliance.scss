@@ -1,0 +1,125 @@
+.internacional-alliance {
+  padding: clamp(3.5rem, 6vw, 6rem) 0;
+  background: #fff;
+  overflow-x: hidden;
+
+  &__container {
+    width: min(1100px, calc(100% - 2rem));
+    margin: 0 auto;
+  }
+
+  &__header {
+    margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+
+    h2 {
+      margin: 0;
+      position: relative;
+      padding-bottom: 0.75rem;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 72px;
+        height: 4px;
+        border-radius: 999px;
+        background: var(--orange);
+      }
+    }
+  }
+
+  &__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-gray);
+    }
+  }
+
+  &__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: rgba(115, 173, 237, 0.16);
+    border: 1px solid rgba(115, 173, 237, 0.35);
+    color: var(--blue);
+  }
+
+  /* ===== CARDS ===== */
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2.2vw, 1.6rem);
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  @media (max-width: 900px) {
+    &__cards {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ===== IMAGEN DISCRETA ===== */
+  &__media {
+    margin: 0;
+    border-radius: 1.25rem;
+    overflow: hidden;
+
+    max-height: 320px; /* 👈 controla protagonismo */
+    display: grid;
+    place-items: center;
+
+    background: rgba(115, 173, 237, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 320px;
+      object-fit: contain; /* 👈 NO se corta */
+      display: block;
+    }
+  }
+}
+
+/* ===== CARD ===== */
+.internacional-alliance-card {
+  border-radius: 1.25rem;
+  background: rgba(115, 173, 237, 0.08);
+  border: 1px solid rgba(115, 173, 237, 0.22);
+  padding: 1.25rem;
+
+  h3 {
+    margin: 0.25rem 0 0.6rem;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.8;
+    color: var(--text-gray);
+  }
+
+  &__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 0.5rem;
+
+    background: rgba(115, 173, 237, 0.16);
+    border: 1px solid rgba(115, 173, 237, 0.35);
+    color: var(--blue);
+  }
+}

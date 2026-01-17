@@ -1,0 +1,62 @@
+.consultoria-hero {
+  padding: clamp(4rem, 8vw, 7rem) 0;
+  overflow-x: hidden; // evita scroll horizontal fantasma
+
+  &__container {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: center;
+  }
+
+  &__image {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden; // evita que la imagen desborde
+    border-radius: 1.25rem;
+
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 460px;
+      display: block;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+  }
+
+  &__content {
+    max-width: 42rem;
+
+    h1 {
+      margin: 0 0 1.25rem;
+      max-width: 20ch; // mejor proporción en desktop grande
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.7;
+    }
+  }
+
+  @media (max-width: 900px) {
+    padding: 3rem 0;
+
+    &__container {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    &__image {
+      border-radius: 1rem;
+
+      img {
+        max-height: 320px;
+      }
+    }
+
+    &__content {
+      max-width: 100%;
+    }
+  }
+}

@@ -1,0 +1,198 @@
+.wa-advisor {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: grid;
+  place-items: center;
+}
+
+.wa-advisor__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.wa-advisor__panel {
+  position: relative;
+  width: min(760px, 92%);
+  border-radius: 18px;
+  background: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* Header corporativo */
+.wa-advisor__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  background: var(--orange);
+  color: #fff;
+
+  strong {
+    display: block;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin: 0.25rem 0 0;
+    opacity: 0.92;
+    font-weight: 600;
+  }
+}
+
+.wa-advisor__close {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.wa-advisor__close:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+/* Grid */
+.wa-advisor__grid {
+  padding: 1rem 1.1rem 1.1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.wa-advisor__card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 0.95rem;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.wa-advisor__card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+/* Icono de área (corporativo naranja) */
+.wa-advisor__icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(248, 107, 37, 0.12);
+  border: 1px solid rgba(248, 107, 37, 0.28);
+}
+
+.wa-advisor__icon svg {
+  color: var(--orange);
+}
+
+.wa-advisor__text {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.wa-advisor__text strong {
+  color: var(--text-dark);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.wa-advisor__text small {
+  color: var(--text-gray);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* ✅ CTA CLARO a WhatsApp */
+.wa-advisor__cta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.wa-advisor__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  padding: 0.48rem 0.75rem;
+  border-radius: 999px;
+
+  background: #25d366; /* WhatsApp green */
+  color: #fff;
+
+  font-weight: 900;
+  font-size: 0.82rem;
+  white-space: nowrap;
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  transition:
+    transform 0.15s ease,
+    opacity 0.2s ease;
+}
+
+.wa-advisor__card:hover .wa-advisor__cta-btn {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+/* Footer */
+.wa-advisor__footer {
+  padding: 0.9rem 1.1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: flex-end;
+  background: var(--white);
+}
+
+.wa-advisor__btn {
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    transform 0.15s ease;
+}
+
+.wa-advisor__btn:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .wa-advisor__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .wa-advisor__panel {
+    width: calc(100vw - 24px);
+  }
+}

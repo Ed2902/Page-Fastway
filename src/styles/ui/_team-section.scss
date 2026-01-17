@@ -1,0 +1,60 @@
+.team {
+  padding: 4rem 0;
+}
+
+.team__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.team__header {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
+
+.team__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.team__image {
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+  }
+
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    opacity: 0.75;
+    text-align: center;
+  }
+}
+
+.team__text {
+  p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 768px) {
+  .team__content {
+    grid-template-columns: 1fr;
+  }
+}

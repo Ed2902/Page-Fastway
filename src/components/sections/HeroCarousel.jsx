@@ -1,142 +1,148 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-// Imágenes locales
-import hero1 from '../../assets/hero/hero-1.webp'
-import hero2 from '../../assets/hero/hero-2.webp'
-import hero3 from '../../assets/hero/hero-3.webp'
-import hero4 from '../../assets/hero/hero-4.webp'
-import hero5 from '../../assets/hero/hero-5.webp'
-import hero6 from '../../assets/hero/hero-6.webp'
+// ===== IMÁGENES HERO =====
+import hero1 from '../../assets/hero-1.webp'
+import hero2 from '../../assets/hero-2.webp'
+import hero3 from '../../assets/hero-3.webp'
+import hero4 from '../../assets/hero-4.webp'
+import hero5 from '../../assets/hero-5.webp'
+import hero6 from '../../assets/hero-6.webp'
 
-const DEFAULT_SLIDES = [
+// ===== SLIDES =====
+const SLIDES = [
   {
-    id: 's1',
+    id: 'hero-1',
     image: hero1,
-    alt: 'Contenedores y logística',
-    title: 'Logística que impulsa tu negocio',
+    alt: 'Logística internacional y transporte de carga',
+    title: 'Logística que mueve tu negocio',
     subtitle:
-      'Soluciones nacionales e internacionales con acompañamiento consultivo y trazabilidad.',
-    ctaText: 'Conocer servicios',
+      'Soluciones integrales en logística nacional e internacional con trazabilidad y eficiencia.',
+    ctaText: 'Nuestros servicios',
     ctaHref: '/servicios',
   },
   {
-    id: 's2',
+    id: 'hero-2',
     image: hero2,
     alt: 'Transporte y cadena de suministro',
-    title: 'Eficiencia en cada entrega',
+    title: 'Eficiencia en cada operación',
     subtitle:
-      'Optimización de costos, tiempos y procesos para una operación más competitiva.',
+      'Optimizamos tiempos y costos para fortalecer tu cadena de suministro.',
     ctaText: 'Logística nacional',
     ctaHref: '/servicios/nacional',
   },
   {
-    id: 's3',
+    id: 'hero-3',
     image: hero3,
-    alt: 'Carga y exportación',
-    title: 'Expande tu alcance internacional',
+    alt: 'Carga internacional y comercio exterior',
+    title: 'Expande tu operación global',
     subtitle:
-      'Acompañamiento experto para escalar tu operación en mercados internacionales.',
+      'Acompañamiento experto en comercio exterior y logística internacional.',
     ctaText: 'Logística internacional',
     ctaHref: '/servicios/internacional',
   },
   {
-    id: 's4',
+    id: 'hero-4',
     image: hero4,
-    alt: 'Gestión logística integral',
-    title: 'Gestión logística integral',
+    alt: 'Consultoría logística',
+    title: 'Consultoría estratégica',
     subtitle:
-      'Planeación, control y ejecución logística alineada a tus objetivos de negocio.',
-    ctaText: 'Consultoría logística',
+      'Diagnóstico, planeación y mejora continua de tus procesos logísticos.',
+    ctaText: 'Consultoría',
     ctaHref: '/servicios/consultoria',
   },
   {
-    id: 's5',
+    id: 'hero-5',
     image: hero5,
-    alt: 'Optimización de procesos logísticos',
-    title: 'Optimiza tus procesos',
-    subtitle: 'Reducimos tiempos y costos mediante análisis y mejora continua.',
-    ctaText: 'Hablar con un experto',
-    ctaHref: '/contacto',
+    alt: 'Economía circular y logística sostenible',
+    title: 'Logística circular',
+    subtitle:
+      'Soluciones sostenibles enfocadas en economía circular y eficiencia ambiental.',
+    ctaText: 'Economía circular',
+    ctaHref: '/circular',
   },
   {
-    id: 's6',
+    id: 'hero-6',
     image: hero6,
     alt: 'Soluciones logísticas personalizadas',
     title: 'Soluciones a tu medida',
     subtitle:
-      'Diseñamos soluciones logísticas personalizadas según tu operación.',
-    ctaText: 'Solicitar asesoría',
+      'Diseñamos soluciones logísticas adaptadas a las necesidades de tu negocio.',
+    ctaText: 'Contáctanos',
     ctaHref: '/contacto',
   },
 ]
 
-export default function HeroCarousel({
-  slides,
-  autoPlay = true,
-  intervalMs = 6000,
-}) {
-  const data = useMemo(
-    () => (slides?.length ? slides : DEFAULT_SLIDES),
-    [slides]
-  )
-
+export default function HeroCarousel({ autoPlay = true, intervalMs = 6000 }) {
+  const data = useMemo(() => SLIDES, [])
   const [index, setIndex] = useState(0)
   const timerRef = useRef(null)
 
+  const total = data.length
+  const current = data[index]
+
   const goTo = i => {
-    const nextIdx = (i + data.length) % data.length
-    setIndex(nextIdx)
+    const next = (i + total) % total
+    setIndex(next)
   }
 
   const next = () => goTo(index + 1)
   const prev = () => goTo(index - 1)
 
-  // Autoplay
+  // ===== AUTOPLAY =====
   useEffect(() => {
-    if (!autoPlay || data.length <= 1) return
+    if (!autoPlay || total <= 1) return
+
     timerRef.current = window.setInterval(() => {
-      setIndex(i => (i + 1) % data.length)
+      setIndex(i => (i + 1) % total)
     }, intervalMs)
 
     return () => {
-      if (timerRef.current) window.clearInterval(timerRef.current)
+      if (timerRef.current) clearInterval(timerRef.current)
     }
-  }, [autoPlay, intervalMs, data.length])
+  }, [autoPlay, intervalMs, total])
 
-  // Teclado
+  // ===== TECLADO =====
   useEffect(() => {
-    const onKeyDown = e => {
+    const onKey = e => {
       if (e.key === 'ArrowRight') next()
       if (e.key === 'ArrowLeft') prev()
     }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index])
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
 
-  const current = data[index]
+  // ===== PRECARGAR SIGUIENTE IMAGEN =====
+  useEffect(() => {
+    const preload = src => {
+      if (!src) return
+      const img = new Image()
+      img.src = src
+    }
+
+    preload(data[(index + 1) % total]?.image)
+  }, [index, data, total])
 
   return (
     <section className='hero' aria-label='Carrusel principal'>
-      {/* Fondo */}
+      {/* ===== FONDO (LCP OPTIMIZADO) ===== */}
       <div className='hero__bg' aria-hidden='true'>
-        {data.map((s, i) => (
-          <img
-            key={s.id}
-            className={`hero__img ${i === index ? 'is-active' : ''}`}
-            src={s.image}
-            alt=''
-            loading={i === 0 ? 'eager' : 'lazy'}
-            decoding='async'
-          />
-        ))}
+        <img
+          className='hero__img is-active'
+          src={current.image}
+          alt=''
+          loading='eager'
+          decoding='async'
+          fetchpriority='high'
+          sizes='100vw'
+          width='1600'
+          height='625'
+        />
         <div className='hero__overlay' />
       </div>
 
-      {/* Contenido */}
+      {/* ===== CONTENIDO ===== */}
       <div className='hero__content'>
         <div className='hero__text'>
-          {/* SEO: el H1 único debe estar en la página, no en el carrusel */}
           <h2 className='hero__title'>{current.title}</h2>
           <p className='hero__subtitle'>{current.subtitle}</p>
 
@@ -150,7 +156,7 @@ export default function HeroCarousel({
           </div>
         </div>
 
-        {/* Controles */}
+        {/* ===== CONTROLES ===== */}
         <div className='hero__controls' aria-label='Controles del carrusel'>
           <button
             className='hero__btn'
@@ -161,15 +167,15 @@ export default function HeroCarousel({
             ‹
           </button>
 
-          <div className='hero__dots' role='tablist' aria-label='Diapositivas'>
-            {data.map((_, i) => (
+          <div className='hero__dots' role='tablist'>
+            {data.map((s, i) => (
               <button
-                key={i}
+                key={s.id}
                 className={`hero__dot ${i === index ? 'is-active' : ''}`}
                 type='button'
                 onClick={() => goTo(i)}
+                aria-current={i === index}
                 aria-label={`Ir a la diapositiva ${i + 1}`}
-                aria-current={i === index ? 'true' : 'false'}
               />
             ))}
           </div>

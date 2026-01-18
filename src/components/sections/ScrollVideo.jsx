@@ -14,17 +14,39 @@ export default function ScrollVideo({
 }) {
   const videoRef = useRef(null)
   const [ready, setReady] = useState(false)
+  const [shouldLoad, setShouldLoad] = useState(false)
 
   useEffect(() => {
     // AOS ya está inicializado en el proyecto; refrescamos este bloque
     try {
       AOS.refresh()
     } catch (err) {
-      // Si AOS no está listo por algún motivo, no bloqueamos el render
       console.debug('[AOS] refresh skipped:', err)
     }
   }, [])
 
+  // 1) Decide cuándo cargar el MP4 (solo cuando el video esté visible)
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const visible =
+          entry.isIntersecting && entry.intersectionRatio >= threshold
+
+        if (visible) {
+          setShouldLoad(true)
+        }
+      },
+      { threshold: [0, 0.15, threshold, 0.6, 1] }
+    )
+
+    io.observe(video)
+    return () => io.disconnect()
+  }, [threshold])
+
+  // 2) Autoplay/pause cuando entra/sale del viewport (solo si ya está cargado)
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
@@ -41,13 +63,10 @@ export default function ScrollVideo({
 
         if (!ready) return
 
-        // Asegura autoplay permitido
         video.muted = true
-
         try {
           await video.play()
         } catch (err) {
-          // Autoplay puede bloquearse según el navegador/políticas
           console.debug('[Video] autoplay blocked:', err)
         }
       },
@@ -81,11 +100,13 @@ export default function ScrollVideo({
           <video
             ref={videoRef}
             className='scroll-video__media'
-            src={bodegaVideo}
-            poster={bodegaPoster} // si no quieres poster, elimina esta línea
+            // ✅ Solo asignamos src cuando ya debe cargarse
+            src={shouldLoad ? bodegaVideo : undefined}
+            poster={bodegaPoster}
             muted
             playsInline
-            preload='metadata'
+            // ✅ Evita bajar el MP4 en carga inicial
+            preload='none'
             controls
             onCanPlay={() => setReady(true)}
           />

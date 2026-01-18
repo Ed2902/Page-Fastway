@@ -101,30 +101,25 @@ export default function HeroCarousel({ autoPlay = true, intervalMs = 6000 }) {
     }
   }, [autoPlay, intervalMs, total])
 
-  // ===== TECLADO =====
+  // ===== CONTROL POR TECLADO =====
   useEffect(() => {
-    const onKey = e => {
+    const onKeyDown = e => {
       if (e.key === 'ArrowRight') next()
       if (e.key === 'ArrowLeft') prev()
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
   })
 
   // ===== PRECARGAR SIGUIENTE IMAGEN =====
   useEffect(() => {
-    const preload = src => {
-      if (!src) return
-      const img = new Image()
-      img.src = src
-    }
-
-    preload(data[(index + 1) % total]?.image)
+    const img = new Image()
+    img.src = data[(index + 1) % total]?.image
   }, [index, data, total])
 
   return (
     <section className='hero' aria-label='Carrusel principal'>
-      {/* ===== FONDO (LCP OPTIMIZADO) ===== */}
+      {/* Fondo – LCP optimizado */}
       <div className='hero__bg' aria-hidden='true'>
         <img
           className='hero__img is-active'
@@ -140,7 +135,7 @@ export default function HeroCarousel({ autoPlay = true, intervalMs = 6000 }) {
         <div className='hero__overlay' />
       </div>
 
-      {/* ===== CONTENIDO ===== */}
+      {/* Contenido */}
       <div className='hero__content'>
         <div className='hero__text'>
           <h2 className='hero__title'>{current.title}</h2>
@@ -156,39 +151,28 @@ export default function HeroCarousel({ autoPlay = true, intervalMs = 6000 }) {
           </div>
         </div>
 
-        {/* ===== CONTROLES ===== */}
-        <div className='hero__controls' aria-label='Controles del carrusel'>
-          <button
-            className='hero__btn'
-            type='button'
-            onClick={prev}
-            aria-label='Anterior'
-          >
-            ‹
-          </button>
+        {/* Controles – SOLO flechas (sin dots, accesible) */}
+        {total > 1 && (
+          <div className='hero__controls' aria-label='Controles del carrusel'>
+            <button
+              className='hero__btn'
+              type='button'
+              onClick={prev}
+              aria-label='Anterior'
+            >
+              ‹
+            </button>
 
-          <div className='hero__dots' role='tablist'>
-            {data.map((s, i) => (
-              <button
-                key={s.id}
-                className={`hero__dot ${i === index ? 'is-active' : ''}`}
-                type='button'
-                onClick={() => goTo(i)}
-                aria-current={i === index}
-                aria-label={`Ir a la diapositiva ${i + 1}`}
-              />
-            ))}
+            <button
+              className='hero__btn'
+              type='button'
+              onClick={next}
+              aria-label='Siguiente'
+            >
+              ›
+            </button>
           </div>
-
-          <button
-            className='hero__btn'
-            type='button'
-            onClick={next}
-            aria-label='Siguiente'
-          >
-            ›
-          </button>
-        </div>
+        )}
 
         {/* Texto accesible */}
         <p className='sr-only'>{current.alt}</p>

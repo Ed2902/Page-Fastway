@@ -31,7 +31,7 @@ export default function TeamSection() {
               width='1200'
               height='800'
             />
-            <figcaption>
+            <figcaption style={{ color: '#fff' }}>
               Equipo operativo y administrativo de Fastway
             </figcaption>
           </figure>

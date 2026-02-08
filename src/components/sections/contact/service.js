@@ -1,5 +1,5 @@
-const BASE_URL = 'https://api.fastwaysas.com'
-const CONTACT_PATH = '/api/contact'
+const ENDPOINT_URL = 'https://leads.appfastway.com/Leads/public/leads/ingest'
+const PUBLIC_KEY = 'key_landing_abc'
 
 function safeJsonParse(text) {
   try {
@@ -10,43 +10,52 @@ function safeJsonParse(text) {
 }
 
 /**
- * Envía la solicitud al backend.
- * - Si hay foto: usa multipart/form-data (FormData)
- * - Si no hay foto: envía JSON
+ * Estándar de envío:
+ * multipart/form-data
+ * - pageUrl
+ * - formId
+ * - payload (JSON)
+ * - files (0..N)
  *
- * Retorna un objeto normalizado:
- * {
- *   ok: boolean,
- *   status: number,
- *   message: string,
- *   fieldErrors?: Record<string, string>
- * }
+ * @param {object} payload
+ * @param {File|null} cargoPhoto
+ * @param {object} opts
+ * @param {string=} opts.formId
+ * @param {File[]=} opts.files
  */
-export async function sendContactRequest(payload, cargoPhoto) {
-  const url = `${BASE_URL}${CONTACT_PATH}`
+export async function sendContactRequest(payload, cargoPhoto, opts = {}) {
+  const fd = new FormData()
 
-  const hasFile = !!cargoPhoto
+  // metadata
+  fd.append('pageUrl', window.location.href)
+  fd.append('formId', opts.formId || 'contactForm')
+
+  // payload flexible
+  fd.append('payload', JSON.stringify(payload || {}))
+
+  // archivo principal
+  if (cargoPhoto) fd.append('files', cargoPhoto)
+
+  // archivos adicionales (si algún día los usas)
+  if (Array.isArray(opts.files)) {
+    opts.files.forEach(f => {
+      if (f) fd.append('files', f)
+    })
+  }
+
+  const headers = {
+    'x-api-key': PUBLIC_KEY,
+  }
 
   let res
   try {
-    if (hasFile) {
-      const fd = new FormData()
-      Object.entries(payload).forEach(([k, v]) => fd.append(k, String(v)))
-      fd.append('cargoPhoto', cargoPhoto)
-
-      res = await fetch(url, {
-        method: 'POST',
-        body: fd,
-      })
-    } else {
-      res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-    }
-    // eslint-disable-next-line no-unused-vars
+    res = await fetch(ENDPOINT_URL, {
+      method: 'POST',
+      headers,
+      body: fd,
+    })
   } catch (err) {
+    console.error('[sendContactRequest] fetch error:', err)
     return {
       ok: false,
       status: 0,
@@ -58,68 +67,35 @@ export async function sendContactRequest(payload, cargoPhoto) {
   const text = await res.text()
   const parsed = safeJsonParse(text)
 
-  // Si el backend responde JSON, intentamos interpretar estructura común:
-  // - { ok: true, message: "..." }
-  // - { success: true, message: "..." }
-  // - { errors: { field: "msg" }, message: "..." }
+  // Backend responde JSON estándar
   if (parsed.ok && parsed.data && typeof parsed.data === 'object') {
     const data = parsed.data
+    const ok = res.ok && data.ok === true
 
-    const ok =
-      res.ok &&
-      (data.ok === true ||
-        data.success === true ||
-        data.status === 'ok' ||
-        data.sent === true)
-
-    const message =
-      data.message ||
-      data.msg ||
-      (ok
-        ? 'Solicitud enviada correctamente.'
-        : 'El servidor no pudo procesar la solicitud.')
-
-    const fieldErrors =
-      data.fieldErrors || data.errors || data.validationErrors || null
-
-    // Si res.ok pero el backend no marca "ok", igual lo tratamos como ok
-    if (res.ok && !ok) {
-      return { ok: true, status, message }
-    }
-
-    if (!res.ok) {
-      return {
-        ok: false,
-        status,
-        message,
-        fieldErrors:
-          fieldErrors && typeof fieldErrors === 'object'
-            ? fieldErrors
-            : undefined,
-      }
-    }
-
-    return { ok: true, status, message }
-  }
-
-  // Si NO viene JSON (HTML, texto plano, etc.)
-  if (res.ok) {
     return {
-      ok: true,
+      ok,
       status,
-      message: 'Solicitud enviada correctamente.',
+      message:
+        data.message ||
+        (ok
+          ? '¡Solicitud enviada! Te contactaremos pronto.'
+          : 'El servidor no pudo procesar la solicitud.'),
+      leadId: data.leadId || data.id,
+      notification: data.notification,
+      fieldErrors: data.fieldErrors || data.errors,
     }
   }
 
-  // Mensajes por status HTTP (fallback)
+  // Fallback por status HTTP
+  if (res.ok) {
+    return { ok: true, status, message: 'Solicitud enviada correctamente.' }
+  }
+
   let message = 'No pudimos enviar tu solicitud.'
-  if (status === 400)
-    message = 'Revisa los datos: el servidor reportó información inválida.'
-  if (status === 401 || status === 403)
-    message = 'No autorizado para enviar esta solicitud.'
-  if (status === 404) message = 'Endpoint no encontrado en el servidor.'
-  if (status >= 500)
-    message = 'El servidor tuvo un problema. Intenta más tarde.'
+  if (status === 400) message = 'Revisa los datos enviados.'
+  if (status === 401 || status === 403) message = 'No autorizado.'
+  if (status === 404) message = 'Endpoint no encontrado.'
+  if (status >= 500) message = 'Error interno del servidor.'
 
   return { ok: false, status, message }
 }

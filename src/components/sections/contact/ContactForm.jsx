@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { FiSend, FiArrowRight, FiPaperclip } from 'react-icons/fi'
 import { sendContactRequest } from './service'
 import DataPolicyModal from './DataPolicyModal'
@@ -10,25 +10,29 @@ const SERVICES = [
   { value: 'circular', label: 'Circular' },
 ]
 
+const INITIAL_FORM = {
+  name: '',
+  company: '',
+  email: '',
+  phone: '',
+  service: '',
+  origin: '',
+  destination: '',
+  cargo: '',
+  details: '',
+  consent: true,
+  cargoPhoto: null,
+}
+
 export default function ContactForm() {
+  const fileInputRef = useRef(null)
+
   const [status, setStatus] = useState('idle') // idle | sending | success | error
   const [errorMsg, setErrorMsg] = useState('')
   const [serverMsg, setServerMsg] = useState('')
   const [isPolicyOpen, setIsPolicyOpen] = useState(false)
 
-  const [form, setForm] = useState({
-    name: '',
-    company: '',
-    email: '',
-    phone: '',
-    service: '', // 👈 sin predeterminado
-    origin: '',
-    destination: '',
-    cargo: '', // 👈 ahora opcional
-    details: '',
-    consent: true,
-    cargoPhoto: null, // opcional
-  })
+  const [form, setForm] = useState(INITIAL_FORM)
 
   const isConsulting = form.service === 'consultoria'
   const isCircular = form.service === 'circular'
@@ -54,6 +58,13 @@ export default function ContactForm() {
 
   function onChange(e) {
     const { name, value, type, checked, files } = e.target
+
+    // al cambiar algo, limpiamos mensajes (mejor UX)
+    if (status !== 'sending') {
+      setErrorMsg('')
+      setServerMsg('')
+      if (status !== 'idle') setStatus('idle')
+    }
 
     if (type === 'checkbox') {
       setForm(prev => ({ ...prev, [name]: checked }))
@@ -94,6 +105,10 @@ export default function ContactForm() {
 
   async function onSubmit(e) {
     e.preventDefault()
+
+    // ✅ evita doble envío si el usuario insiste
+    if (status === 'sending') return
+
     setErrorMsg('')
     setServerMsg('')
 
@@ -113,22 +128,29 @@ export default function ContactForm() {
         email: form.email.trim(),
         phone: form.phone.trim(),
         service: form.service,
-        // En consultoría puede ir vacío, igual lo enviamos como string
         origin: form.origin.trim(),
         destination: form.destination.trim(),
-        // cargo opcional
         cargo: form.cargo.trim(),
         details: form.details.trim(),
         consent: form.consent,
       }
 
-      const res = await sendContactRequest(payload, form.cargoPhoto)
+      const res = await sendContactRequest(payload, form.cargoPhoto, {
+        formId: 'contactForm',
+      })
 
       if (res.ok) {
         setStatus('success')
         setServerMsg(
           res.message || '¡Solicitud enviada! Te contactaremos pronto.'
         )
+
+        // ✅ reset del form para que no reenvíen lo mismo
+        setForm(INITIAL_FORM)
+
+        // ✅ limpia el input file real (si estaba seleccionado)
+        if (fileInputRef.current) fileInputRef.current.value = ''
+
         return
       }
 
@@ -143,12 +165,19 @@ export default function ContactForm() {
       setErrorMsg(
         res.message || 'No pudimos enviar tu solicitud. Intenta nuevamente.'
       )
-    } catch {
+    } catch (err) {
+      console.error('[ContactForm] submit error:', err)
       setStatus('error')
       setErrorMsg(
         'Error de conexión. Verifica tu internet e intenta nuevamente.'
       )
     }
+  }
+
+  function openFilePicker() {
+    // ✅ si está enviando, no permitimos abrir picker
+    if (status === 'sending') return
+    fileInputRef.current?.click()
   }
 
   return (
@@ -191,6 +220,7 @@ export default function ContactForm() {
                       autoComplete='name'
                       placeholder='Tu nombre'
                       required
+                      disabled={status === 'sending'}
                     />
                   </label>
 
@@ -203,6 +233,7 @@ export default function ContactForm() {
                       autoComplete='organization'
                       placeholder='Nombre de tu empresa'
                       required
+                      disabled={status === 'sending'}
                     />
                   </label>
 
@@ -215,6 +246,7 @@ export default function ContactForm() {
                       autoComplete='tel'
                       placeholder='+57 / +1'
                       required
+                      disabled={status === 'sending'}
                     />
                   </label>
                 </div>
@@ -229,6 +261,7 @@ export default function ContactForm() {
                       autoComplete='email'
                       placeholder='tu@correo.com'
                       required
+                      disabled={status === 'sending'}
                     />
                   </label>
 
@@ -240,6 +273,7 @@ export default function ContactForm() {
                         value={form.service}
                         onChange={onChange}
                         required
+                        disabled={status === 'sending'}
                       >
                         <option value='' disabled>
                           Selecciona…
@@ -252,13 +286,11 @@ export default function ContactForm() {
                         ))}
                       </select>
 
-                      {/* “Circular” en verde (como etiqueta) */}
                       {isCircular ? (
                         <span className='tag-green'>Circular</span>
                       ) : null}
                     </div>
 
-                    {/* microcopy contextual */}
                     {isConsulting ? (
                       <small className='field__help'>
                         En consultoría, origen y destino son opcionales.
@@ -281,6 +313,7 @@ export default function ContactForm() {
                       onChange={onChange}
                       placeholder={isConsulting ? 'Opcional' : 'Ciudad / País'}
                       required={!isConsulting}
+                      disabled={status === 'sending'}
                     />
                   </label>
 
@@ -292,6 +325,7 @@ export default function ContactForm() {
                       onChange={onChange}
                       placeholder={isConsulting ? 'Opcional' : 'Ciudad / País'}
                       required={!isConsulting}
+                      disabled={status === 'sending'}
                     />
                   </label>
 
@@ -302,6 +336,7 @@ export default function ContactForm() {
                       value={form.cargo}
                       onChange={onChange}
                       placeholder='Opcional: peso/volumen/tipo'
+                      disabled={status === 'sending'}
                     />
                   </label>
                 </div>
@@ -316,32 +351,38 @@ export default function ContactForm() {
                       rows={3}
                       placeholder='Describe lo que necesitas (fechas, alcance, condiciones, etc.)'
                       required
+                      disabled={status === 'sending'}
                     />
                   </label>
 
                   <label className='field field--file'>
                     <span>Foto de la mercancía (opcional)</span>
+
+                    {/* ✅ input real oculto controlado por ref */}
+                    <input
+                      ref={fileInputRef}
+                      id='cargoPhotoInput'
+                      type='file'
+                      name='cargoPhoto'
+                      accept='image/jpeg,image/png,image/webp'
+                      onChange={onChange}
+                      style={{ display: 'none' }}
+                      disabled={status === 'sending'}
+                    />
+
+                    {/* ✅ botón visual que abre picker */}
                     <div
                       className='file'
                       role='button'
                       tabIndex={0}
-                      onClick={() =>
-                        document.getElementById('cargoPhotoInput')?.click()
-                      }
+                      onClick={openFilePicker}
                       onKeyDown={e => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault()
-                          document.getElementById('cargoPhotoInput')?.click()
+                          openFilePicker()
                         }
                       }}
                     >
-                      <input
-                        id='cargoPhotoInput'
-                        type='file'
-                        name='cargoPhoto'
-                        accept='image/jpeg,image/png,image/webp'
-                        onChange={onChange}
-                      />
                       <span className='file__btn' aria-hidden='true'>
                         <FiPaperclip /> Adjuntar
                       </span>
@@ -364,6 +405,7 @@ export default function ContactForm() {
                     checked={form.consent}
                     onChange={onChange}
                     required
+                    disabled={status === 'sending'}
                   />
                   <span>
                     Autorizo el tratamiento de datos para responder esta
@@ -375,6 +417,7 @@ export default function ContactForm() {
                   type='button'
                   className='contact-form__policy-link'
                   onClick={() => setIsPolicyOpen(true)}
+                  disabled={status === 'sending'}
                 >
                   Leer política
                 </button>

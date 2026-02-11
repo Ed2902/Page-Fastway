@@ -45,7 +45,7 @@ export default function ScrollVideo({
   }, [threshold])
 
   const src = useMemo(() => {
-    const base = 'https://www.youtube-nocookie.com/embed/vxEqY5V0oB0'
+    const base = 'https://www.youtube-nocookie.com/embed/awkjXCq0r5c'
 
     const params = new URLSearchParams({
       autoplay: isActive ? '1' : '0',
